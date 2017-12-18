@@ -2,9 +2,7 @@
 
 @section('content')
 
-
-    <router-view></router-view>
-
+    <appointments-dashboard></appointments-dashboard>
 
 @endsection
 

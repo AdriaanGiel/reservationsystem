@@ -1,7 +1,13 @@
 import './bootstrap';
-import router from './routes';
+import Appointments from './components/appointments/appointments.vue';
+import AppointmentsHome from './components/appointments/dashboard.vue';
+import AppointmentsForm from './components/appointments/form.vue';
 
 const app = new Vue({
     el: '#app',
-    router
+    components:{
+        'appointments': Appointments,
+        'appointments-dashboard': AppointmentsHome,
+        'appointments-form': AppointmentsForm
+    }
 });

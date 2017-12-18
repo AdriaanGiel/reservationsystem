@@ -61,11 +61,6 @@
 </template>
 
 <script>
-
-    // let Appointment = require('../../models/appointment');
-
-    import Appointment from '../../models/appointment';
-
     export default {
         mounted(){
 

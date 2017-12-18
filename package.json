@@ -23,7 +23,6 @@
         "jquery": "^3.2.1",
         "materialize-css": "^0.100.2",
         "moment": "^2.19.4",
-        "sweetalert": "^2.0.8",
-        "vue-router": "^3.0.1"
+        "sweetalert": "^2.0.8"
     }
 }

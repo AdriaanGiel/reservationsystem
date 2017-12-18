@@ -12,4 +12,15 @@ let mix = require('laravel-mix');
  */
 
 mix.js('resources/assets/js/app.js', 'public/js')
-   .sass('resources/assets/sass/app.scss', 'public/css');
+    .extract(['vue', 'moment', 'fullcalendar', 'axios','materialize-css'])
+    .stylus('resources/assets/stylus/app.styl', 'public/css')
+    .styles([
+        "node_modules/materialize-css/dist/css/materialize.css",
+        "node_modules/fullcalendar/dist/fullcalendar.css",
+
+    ],'public/css/vendor.css')
+    .copyDirectory('resources/assets/img', 'public/img');
+
+mix.autoload({
+    jquery: ['$', 'window.jQuery']
+});

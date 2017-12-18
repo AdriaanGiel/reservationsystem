@@ -11,9 +11,17 @@
 |
 */
 
+use Routes\RouteGenerator;
+
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 });
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+RouteGenerator::generateResource('assignements',\Front\AssignmentController::class);
 
 Auth::routes();
 

@@ -1,0 +1,70 @@
+standard-color = #1e9bc7
+second-standard-color = darken(standard-color, 30%)
+
+$color-red = #F13385
+
+$color-orange = #f69046
+
+$color-yellow = #f9eb2b
+
+.text-orange
+  color $color-orange
+
+.text-yellow
+  color $color-yellow
+
+.text-red
+  color $color-red
+
+.red-background
+  background-color $color-red
+  color white
+
+.yellow-background
+  background-color $color-yellow
+  color white
+
+.orange-background
+  background-color $color-orange
+  color white
+
+.label-color
+  font-weight: 500
+  color: #fff !important
+  background-color: #00bcd4
+  border-radius: 2px !important
+  font-size 16px !important
+
+.text-gray
+  color #a7afb8
+
+.text-dark-gray
+  color #34495e
+
+secondary-color = white
+
+.standard-background
+  background-color standard-color
+  //color secondary-color
+
+.secondary-background
+  background-color $color-red
+  //color standard-color
+
+.text-sec-color
+  color secondary-color
+
+.text-black
+  color black
+
+.text-stand-color
+  color standard-color
+
+.waves-effect.waves-standard .waves-ripple
+  /* The alpha value allows the text and background color
+  of the button to still show through. */
+  background-color rgba(standard-color, 0.65)
+
+button.standard-background:hover,a.standard-background:hover
+  //background-color rgba(standard-color, 0.7)
+  background-color second-standard-color

@@ -25,10 +25,12 @@ class CreateAssignmentsTable extends Migration
 
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('company_id')->nullable();
+            $table->unsignedInteger('assignment_type_id')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('company_id')->references('id')->on('companies');
+            $table->foreign('assignment_type_id')->references('id')->on('assignments');
         });
     }
 

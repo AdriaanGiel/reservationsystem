@@ -16,6 +16,10 @@ use Routes\RouteGenerator;
 
 Auth::routes();
 
+Route::get('test',function(){
+    return factory(\App\Company::class)->create();
+});
+
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('/home', 'HomeController@index')->name('home');
 

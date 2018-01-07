@@ -20,6 +20,7 @@ mix.webpackConfig({
 });
 
 mix.js('resources/assets/js/app.js', 'public/js')
+    .js('resources/assets/js/admin.js', 'public/js')
     .extract(['vue', 'moment', 'fullcalendar', 'axios','materialize-css'])
     .stylus('resources/assets/stylus/app.styl', 'public/css')
     .styles([

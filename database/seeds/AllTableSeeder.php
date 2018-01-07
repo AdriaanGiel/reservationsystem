@@ -19,6 +19,17 @@ class AllTableSeeder extends Seeder
             'name' => 'admin'
         ]);
 
+        DB::table('assignment_type')->insert([
+            [
+                'name' => 'Werving',
+                'created_at' => now()
+            ],
+            [
+                'name' => 'Promo',
+                'created_at' => now()
+            ]
+        ]);
+
         \App\User::create([
             'name' => 'TEster',
             'email' => 'test@test.com',

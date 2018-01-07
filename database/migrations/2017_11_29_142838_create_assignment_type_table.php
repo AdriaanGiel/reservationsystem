@@ -13,7 +13,7 @@ class CreateAssignmentTypeTable extends Migration
      */
     public function up()
     {
-        Schema::create('assignment_tyoe', function (Blueprint $table) {
+        Schema::create('assignment_type', function (Blueprint $table) {
             $table->engine = "InnoDB";
             $table->charset = "utf8";
             $table->collation = "utf8_unicode_ci";

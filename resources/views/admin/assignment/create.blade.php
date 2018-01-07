@@ -2,5 +2,6 @@
 
 @section('content')
 
+    <assignments-form></assignments-form>
 
 @endsection

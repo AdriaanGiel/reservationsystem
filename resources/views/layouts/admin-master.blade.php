@@ -19,27 +19,47 @@
 <body class="full-screen-height">
 <div id="app">
     <header>
-        <nav class="light-blue lighten-1" role="navigation">
-            <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">KYC</a>
+        <nav class="red-background" role="navigation">
+            <div class="nav-wrapper container"><a id="logo-container" href="{{ route('admin')  }}" class="brand-logo">Admin</a>
                 <ul class="right hide-on-med-and-down">
-                    <li><a href="home">Bedrijven</a></li>
-                    <li><a href="appointments">Afspraken</a></li>
-                    <li><a href="appointments">Medewerkers</a></li>
+                    <li><a href="{{ route('admin.companies.index') }}">Bedrijven</a></li>
+                    <li><a href="{{ route('admin.assignments.index') }}">Afspraken</a></li>
+                    <li><a href="{{ route('admin.users.index') }}">Medewerkers</a></li>
+                    @if(Auth::check())
+                        <li>
+                            <a href="{{ route('logout') }}"
+                               onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                Logout
+                            </a>
+                        </li>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            {{ csrf_field() }}
+                        </form>
+                    @endif
                 </ul>
 
                 <ul id="nav-mobile" class="side-nav">
-                    <li><a href="home">Bedrijven</a></li>
-                    <li><a href="appointments">Afspraken</a></li>
-                    <li><a href="appointments">Medewerkers</a></li>
+                    <li><a href="{{ route('admin.companies.index') }}">Bedrijven</a></li>
+                    <li><a href="{{ route('admin.assignments.index') }}">Afspraken</a></li>
+                    <li><a href="{{ route('admin.users.index') }}">Medewerkers</a></li>
+                    @if(Auth::check())
+                        <li>
+                            <a href="{{ route('logout') }}"
+                               onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                Logout
+                            </a>
+                        </li>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            {{ csrf_field() }}
+                        </form>
+                    @endif
                 </ul>
                 <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
             </div>
         </nav>
     </header>
-
-    {{--<aside>--}}
-        {{--@include('admin.partials.sideNav')--}}
-    {{--</aside>--}}
 
     <br>
     <main>
@@ -60,7 +80,7 @@
 <script src="{{ asset("js/manifest.js") }}"></script>
 <script src="{{ asset("js/vendor.js") }}"></script>
 <script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-<script src="{{ asset("js/app.js") }}"></script>
+<script src="{{ asset("js/admin.js") }}"></script>
 
 
 <script>

@@ -25,7 +25,7 @@ class AssignmentController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.assignment.create');
     }
 
     public function getAssignments()
@@ -61,9 +61,9 @@ class AssignmentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($assignment)
     {
-        //
+        return view('admin.assignment.edit',compact($assignment));
     }
 
     /**

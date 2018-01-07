@@ -19,25 +19,45 @@
     <div id="app">
         <header>
             <nav class="light-blue lighten-1" role="navigation">
-                <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">KYC</a>
+                <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">KnowYourCity</a>
                     <ul class="right hide-on-med-and-down">
                         <li><a href="home">Home</a></li>
                         <li><a href="appointments">Afspraken</a></li>
-                        <li>
-                            <a href="{{ route('logout') }}"
-                               onclick="event.preventDefault();
+                        @if(Auth::check())
+                            @if(Auth::user()->isAdmin())
+                                <li><a href="{{ route('admin') }}">Admin</a></li>
+                            @endif
+                                <li>
+                                    <a href="{{ route('logout') }}"
+                                       onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                Logout
-                            </a>
-                        </li>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                            {{ csrf_field() }}
-                        </form>
+                                        Logout
+                                    </a>
+                                </li>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                    {{ csrf_field() }}
+                                </form>
+                        @endif
                     </ul>
 
                     <ul id="nav-mobile" class="side-nav">
                         <li><a href="home">Home</a></li>
                         <li><a href="appointments">Afspraken</a></li>
+                        @if(Auth::check())
+                            @if(Auth::user()->isAdmin())
+                                <li><a href="{{ route('admin') }}">Admin</a></li>
+                            @endif
+                            <li>
+                                <a href="{{ route('logout') }}"
+                                   onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                    Logout
+                                </a>
+                            </li>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                {{ csrf_field() }}
+                            </form>
+                        @endif
                     </ul>
                     <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
                 </div>

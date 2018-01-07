@@ -11,6 +11,14 @@ let mix = require('laravel-mix');
  |
  */
 
+mix.webpackConfig({
+    resolve: {
+        alias: {
+            jquery: "jquery/src/jquery"
+        }
+    }
+});
+
 mix.js('resources/assets/js/app.js', 'public/js')
     .extract(['vue', 'moment', 'fullcalendar', 'axios','materialize-css'])
     .stylus('resources/assets/stylus/app.styl', 'public/css')

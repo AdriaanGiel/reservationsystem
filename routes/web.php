@@ -13,16 +13,10 @@
 
 use Routes\RouteGenerator;
 
-Route::get('/', function () {
-    return view('home');
-});
 
 Auth::routes();
 
+Route::get('/', 'HomeController@index')->name('home');
 Route::get('/home', 'HomeController@index')->name('home');
 
-RouteGenerator::generateResource('assignements',\Front\AssignmentController::class);
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
+RouteGenerator::generateResource('assignments',\Front\AssignmentController::class);

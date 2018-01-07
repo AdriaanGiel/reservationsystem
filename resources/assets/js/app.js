@@ -1,13 +1,13 @@
 import './bootstrap';
-import Appointments from './components/appointments/appointments.vue';
-import AppointmentsHome from './components/appointments/dashboard.vue';
-import AppointmentsForm from './components/appointments/form.vue';
+import Assignment from './components/assignments/assignment.vue';
+import AssignmentsHome from './components/assignments/dashboard.vue';
+import AssignmentsForm from './components/assignments/form.vue';
 
 const app = new Vue({
     el: '#app',
     components:{
-        'appointments': Appointments,
-        'appointments-dashboard': AppointmentsHome,
-        'appointments-form': AppointmentsForm
+        'assignment': Assignment,
+        'assignments-dashboard': AssignmentsHome,
+        'assignments-form': AssignmentsForm
     }
 });

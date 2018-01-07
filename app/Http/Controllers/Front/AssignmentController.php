@@ -15,9 +15,9 @@ class AssignmentController extends Controller
      */
     public function index()
     {
-        $assignements  = Assignment::all();
+        $assignment  = Assignment::all();
 
-        return view('assignment.index',compact('assignements'));
+        return view('assignment.index',compact('assignment'));
     }
 
     /**
@@ -27,7 +27,7 @@ class AssignmentController extends Controller
      */
     public function create()
     {
-        //
+        return view('assignment.create');
     }
 
     /**
@@ -38,7 +38,8 @@ class AssignmentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        return redirect();
     }
 
     /**
@@ -50,6 +51,7 @@ class AssignmentController extends Controller
     public function show(Assignment $assignment)
     {
         //
+        
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Assignment;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -14,7 +15,7 @@ class AssignmentController extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.assignment.index');
     }
 
     /**
@@ -25,6 +26,11 @@ class AssignmentController extends Controller
     public function create()
     {
         //
+    }
+
+    public function getAssignments()
+    {
+        return Assignment::all();
     }
 
     /**

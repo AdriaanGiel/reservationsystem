@@ -24,4 +24,9 @@ class Assignment extends Model
         return $this->belongsTo(Company::class);
     }
 
+    public function judge()
+    {
+
+    }
+
 }

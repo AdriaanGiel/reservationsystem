@@ -100,6 +100,7 @@ class RouteGenerator
     public static function generate(string $type, string $name, string $controller, string $method)
     {
         $route = new RouteGenerator($name,$type,$controller,$method);
+
         return $route->generateRoute();
     }
 

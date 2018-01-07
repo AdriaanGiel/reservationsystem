@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Routes\RouteGenerator;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,4 +16,13 @@ use Illuminate\Http\Request;
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::middleware(['auth'])->group(function(){
+
+});
+
+
+Route::middleware(['admin'])->group(function(){
+    RouteGenerator::generate('get','test',\Admin\AssignmentController::class,'@getAssignments');
 });

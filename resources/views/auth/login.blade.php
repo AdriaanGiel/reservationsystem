@@ -15,15 +15,13 @@
                                 <form method="POST" action="{{ route('login') }}">
                                     {{ csrf_field() }}
                                     <div class="input-field col s12">
-                                        <input placeholder="gebruikernaam" name="username" id="user_name" type="text" class="validate">
+                                        <input placeholder="gebruikernaam" name="email" id="user_name" type="text" class="validate">
                                         <label for="user_name">Gebruikernaam</label>
                                     </div>
                                     <div class="input-field col s12">
                                         <input placeholder="wachtwoord" name="password" id="password" type="password" class="validate">
                                         <label for="password">Wachtwoord</label>
                                     </div>
-
-
 
                                     <div class="row">
                                         <div class="input-field col s12">

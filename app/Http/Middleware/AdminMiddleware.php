@@ -15,6 +15,16 @@ class AdminMiddleware
      */
     public function handle($request, Closure $next)
     {
-        return $next($request);
+        $user = \Auth::user();
+
+        if ($user != null) {
+            if ($user->isAdmin()) {
+                return $next($request);
+            } else {
+                return abort(403, 'Unauthorized action.');
+            }
+        }
+
+        return abort(403, 'Unauthorized action.');
     }
 }

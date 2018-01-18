@@ -19,18 +19,22 @@ class CreateAssignmentsTable extends Migration
             $table->collation = "utf8_unicode_ci";
 
             $table->increments('id');
-            $table->dateTime('date');
+            $table->date('date');
             $table->decimal('hours');
-            $table->text('argumentation');
+            $table->time('start_time');
+            $table->text('description')->nullable();
 
             $table->unsignedInteger('user_id');
-            $table->unsignedInteger('company_id')->nullable();
-            $table->unsignedInteger('assignment_type_id')->nullable();
+            $table->unsignedInteger('company_id');
+            $table->unsignedInteger('assignment_type_id');
+            $table->unsignedInteger('status_id');
             $table->timestamps();
 
+            $table->foreign('status_id')->references('id')->on('statuses');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('company_id')->references('id')->on('companies');
-            $table->foreign('assignment_type_id')->references('id')->on('assignments');
+            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
+            $table->foreign('assignment_type_id')->references('id')->on('assignment_type');
+
         });
     }
 

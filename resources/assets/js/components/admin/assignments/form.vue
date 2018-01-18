@@ -1,67 +1,140 @@
 <template>
     <div class="row">
-        <div class="col s12">
-            <div class="card">
-                <div class="card-content">
-                    <div class="row">
-                        <h4>Afspraak {{ title }}</h4>
-                    </div>
-
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <select>
-                                <option value="" disabled selected>Kies een bedrijf</option>
-                                <option value="false">Nieuw bedrijf</option>
-                                <option value="2">Option 2</option>
-                                <option value="3">Option 3</option>
-                            </select>
-                            <label>Bedrijven</label>
-                        </div>
-                    </div>
+        <form @submit.prevent="validateForm" id="assignment-edit" :action="route" method="POST">
 
 
-                    <div class="row">
-                        <div class="input-field col s6">
-                            <input :value="date" type="text" id="date" name="date" class="datepicker">
-                            <label for="date">Datum</label>
+            <form-required method="method" token="token"></form-required>
+
+            <div class="col s12">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="row">
+                            <h4>Afspraak {{ title }}</h4>
                         </div>
 
-                        <div class="input-field col s6">
-                            <input :value="time" type="text" id="time" name="time" class="timepicker">
-                            <label for="time">Tijd</label>
+                        <div class="row">
+
                         </div>
-                    </div>
 
-                    <div class="row">
-                        <div class="input-field col s6">
-                            <input :value="hours" type="number" id="hours" name="hours">
-                            <label for="Hours">Uren</label>
+                        <div class="row">
+                            <company-auto-complete option="true" v-if="!editForm"
+                                                   v-on:activateNewCompany="showCompanyForm"></company-auto-complete>
                         </div>
-                    </div>
 
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <textarea id="textarea1" class="materialize-textarea">{{ description }}</textarea>
-                            <label for="textarea1">Beschrijving</label>
+
+                        <div v-if="editForm" class="row">
+                            <div class="input-field col s12">
+                                <input v-model="company" disabled name="company" id="company" type="text"
+                                       class="datepicker">
+                                <label for="company">Bedrijf</label>
+                            </div>
                         </div>
+
+
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <input v-model="date" type="text" id="date" name="date" class="datepicker">
+                                <label for="date">Datum</label>
+                            </div>
+
+                            <div class="input-field col s12">
+                                <input v-model="time" type="text" id="time" name="time" class="timepicker">
+                                <label for="time">Tijd</label>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="input-field col s6">
+                                <input v-model="hours" type="number" id="hours" name="hours">
+                                <label for="Hours">Uren</label>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <textarea :disabled="validateLoad" id="textarea1" class="materialize-textarea">{{ description }}</textarea>
+                                <label for="textarea1">Beschrijving</label>
+                            </div>
+                        </div>
+
                     </div>
-
-
-                </div>
-                <div class="card-action">
-                    <a class="waves-effect waves-light btn red-background">Versturen</a>
+                    <div class="card-action flex flex-center">
+                        <a :disabled="validateLoad" class="waves-effect waves-light btn red-background">Versturen <i v-if="validateLoad"
+                                                                                            class="fa fa-refresh fa-spin"
+                                                                                            aria-hidden="true"></i></a>
+                    </div>
                 </div>
             </div>
-        </div>
+        </form>
     </div>
 </template>
 
 <script>
+    import CompanyAutoComplete from "../../partials/CompanyAutoComplete.vue";
+    import CompanyForm from "../../front/companies/form.vue";
+    import MaterialSelect from '../../partials/MaterialSelect.vue';
+    import FormRequired from '../../partials/form-required.vue';
+    import UserAutoComplete from '../../partials/WorkerAutoComplete';
+
     export default {
         name: "form",
-        props:['title','date','time','description','hours']
-        ,
-        mounted(){
+        props: {
+            title: {},
+            assignmentObject:{},
+            companyObject: {},
+            token: {},
+            method: {},
+            route:{},
+        },
+        data() {
+            return {
+                companyForm: false,
+                validateLoad:false,
+                assignment:this.assignmentObject,
+                company:this.companyObject
+            }
+        },
+        components: {
+            "company-auto-complete": CompanyAutoComplete,
+            "company-form": CompanyForm,
+            'material-select': MaterialSelect,
+            'form-required': FormRequired,
+            'worker-auto-complete': UserAutoComplete
+        },
+        methods: {
+            showCompanyForm() {
+                console.log('saasdasd');
+                this.companyForm = !this.companyForm;
+            },
+            validateForm() {
+                let formData = $('#assignment-edit').serializeArray();
+                let data  = {};
+
+                formData.forEach(function(input){
+                    if(String(input.name) != '_method' && String(input.name) != '_token'){
+                        data[input.name] = input.value;
+                    }
+                });
+                this.validateLoad = true;
+
+                axios.post('/api/admin/validate/assignment',data)
+                    .then(response => this.validatedForm(response))
+                    .catch(errors => this.handleValidationErrors(errors));
+                this.$emit('loading');
+            },
+            validatedForm(response){
+                if(response.data){
+                    $('#assignment-edit').submit();
+                }
+            },
+            handleValidationErrors(errors){
+                this.errors = errors.response.data.errors;
+                this.validateLoad = false;
+                this.$emit('loading');
+            }
+
+        },
+        mounted() {
             $('select').material_select();
 
             $('.datepicker').pickadate({
@@ -82,7 +155,8 @@
                 canceltext: 'Cancel', // Text for cancel-button
                 autoclose: false, // automatic close timepicker
                 ampmclickable: true, // make AM PM clickable
-                aftershow: function(){} //Function for after opening timepicker
+                aftershow: function () {
+                } //Function for after opening timepicker
             });
         }
     }

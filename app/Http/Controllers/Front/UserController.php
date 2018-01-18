@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Front;
 
+use App\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -14,39 +15,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+        $user = \Auth::user();
+        return view('front.user.index',compact('user'));
     }
 
     /**
@@ -67,19 +37,39 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $user = \Auth::user();
+        $email = $request->input('email');
+
+        if($user->email != $email){
+            $user->update([
+                'email' => $email
+            ]);
+        }
+
+        return \Auth::user()->profile()->update($request->only([
+            'firstname',
+            'lastname',
+            'phonenumber'
+        ]));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function passwordUpdate(Request $request)
     {
-        //
+        $user = \Auth::user();
+        $user->update([
+            'password' => bcrypt($request->input('password'))
+        ]);
+
+        return $user;
     }
+
+    public function getUserData()
+    {
+        $user = User::with('profile')->where('id',\Auth::user()->id)->first();
+        return $user;
+    }
+
+
 }

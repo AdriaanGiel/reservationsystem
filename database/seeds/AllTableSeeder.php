@@ -30,18 +30,76 @@ class AllTableSeeder extends Seeder
             ]
         ]);
 
-        \App\User::create([
+
+        \App\Status::create([
+            'name' => 'pending'
+        ]);
+
+        \App\Status::create([
+            'name' => 'approved'
+        ]);
+
+        \App\Status::create([
+            'name' => 'rejected'
+        ]);
+
+
+        \App\Status::create([
+            'name' => 'recruitment',
+            'type' => 'company'
+        ]);
+
+        \App\Status::create([
+            'name' => 'promotion',
+            'type' => 'company'
+        ]);
+
+        \App\Status::create([
+            'name' => 'rounded',
+            'type' => 'company'
+        ]);
+
+        $norm1 = \App\User::create([
             'name' => 'TEster',
             'email' => 'test@test.com',
             'password' => bcrypt('password'),
             'role_id' => 2
         ]);
 
-        \App\User::create([
+        $test = \App\User::create([
+           'name' => 'dfssdfsd',
+           'email' => 'a3aan_g@live.nl',
+           'password' => bcrypt('password'),
+           'role_id' => 1
+        ]);
+
+        $test->profile()->create([
+           'firstname' => 'Adriaan',
+           'lastname' => 'Giel',
+           'phonenumber' => '12314695',
+           'hours'      => 8
+        ]);
+
+        $norm1->profile()->create([
+            'firstname' => 'Norm',
+            'lastname' => 'nn',
+            'phonenumber' => '123456987',
+            'hours' => 6,
+        ]);
+
+        $admin1 = \App\User::create([
             'name' => 'TEstert',
             'email' => 'test2@test.com',
             'password' => bcrypt('password'),
             'role_id' => 1
         ]);
+
+        $admin1->profile()->create([
+            'firstname' => 'Admin',
+            'lastname' => 'nn',
+            'phonenumber' => '123456987',
+            'hours' => 5,
+        ]);
+
     }
 }

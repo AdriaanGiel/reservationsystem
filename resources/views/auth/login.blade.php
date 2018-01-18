@@ -14,19 +14,30 @@
                             <div class="row">
                                 <form method="POST" action="{{ route('login') }}">
                                     {{ csrf_field() }}
+                                    @if ($errors->has('email'))
+                                        <span class="help-block">
+                                        <strong>{{ $errors->first('email') }}</strong>
+                                    </span>
+                                    @endif
                                     <div class="input-field col s12">
                                         <input placeholder="gebruikernaam" name="email" id="user_name" type="text" class="validate">
                                         <label for="user_name">Gebruikernaam</label>
+
                                     </div>
                                     <div class="input-field col s12">
                                         <input placeholder="wachtwoord" name="password" id="password" type="password" class="validate">
                                         <label for="password">Wachtwoord</label>
+                                        @if ($errors->has('password'))
+                                            <span class="help-block">
+                                        <strong>{{ $errors->first('password') }}</strong>
+                                    </span>
+                                        @endif
                                     </div>
 
                                     <div class="row">
                                         <div class="input-field col s12">
                                             <button type="submit" class="waves-effect waves-light btn">Inloggen</button>
-                                            <a href="#">Wachtwoord vergeten?</a>
+                                            <a href="{{ route('password.request') }}">Wachtwoord vergeten?</a>
                                         </div>
 
                                     </div>

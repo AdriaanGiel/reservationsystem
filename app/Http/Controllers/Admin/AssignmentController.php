@@ -3,8 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Assignment;
+use App\AssignmentType;
+use App\Company;
+use App\Http\Requests\Admin\AssignmentRequest;
+use App\Status;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use function MongoDB\BSON\toJSON;
 
 class AssignmentController extends Controller
 {
@@ -15,8 +21,10 @@ class AssignmentController extends Controller
      */
     public function index()
     {
-        return view('admin.assignment.index');
+        $assignments = Assignment::with(['company:id,name','type:id,name','user:id,name'])->latest()->get();
+        return view('admin.assignment.index',compact('assignments'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -25,12 +33,9 @@ class AssignmentController extends Controller
      */
     public function create()
     {
-        return view('admin.assignment.create');
-    }
-
-    public function getAssignments()
-    {
-        return Assignment::all();
+        $companies = Company::withStatus('approved');
+        $types = AssignmentType::all();
+        return view('admin.assignment.create',compact('companies','types'));
     }
 
     /**
@@ -41,7 +46,9 @@ class AssignmentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $assignment = Assignment::create($request->all());
+
+        return redirect(route('admin.assignment.index'));
     }
 
     /**
@@ -50,9 +57,17 @@ class AssignmentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Assignment $assignment)
     {
-        //
+        $assignment->load(['user','company','status','type']);
+        $assignment->formatted_date = Carbon::createFromFormat("Y-m-d", $assignment->date)->toFormattedDateString();
+
+        return view('admin.assignment.show',compact('assignment'));
+    }
+
+    public function validateAssignment(AssignmentRequest $request)
+    {
+        return 'true';
     }
 
     /**
@@ -61,9 +76,13 @@ class AssignmentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($assignment)
+    public function edit(Assignment $assignment)
     {
-        return view('admin.assignment.edit',compact($assignment));
+        $assignment->formatted_date = Carbon::createFromFormat("Y-m-d", $assignment->date)->toFormattedDateString();
+        $companies = Company::withStatus('approved');
+        $types = AssignmentType::all();
+        $statuses = Status::standardStatuses();
+        return view('admin.assignment.edit',compact('assignment','companies','types','statuses'));
     }
 
     /**
@@ -73,9 +92,16 @@ class AssignmentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Assignment $assignment)
     {
-        //
+        $assignment->update($request->all());
+        return redirect(route('admin.assignments.show',$assignment->id));
+    }
+
+    public function judgeAssignments(Request $request, Assignment $assignment)
+    {
+        $assignment->judge($request->input('judgement'));
+        return $assignment->load(['status']);
     }
 
     /**
@@ -84,8 +110,11 @@ class AssignmentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Assignment $assignment)
     {
-        //
+        if($assignment->delete()){
+            return $assignment->id;
+        }
+        return \Response::json(['error' => 'Error msg'], 404);
     }
 }

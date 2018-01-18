@@ -20,15 +20,19 @@ class CreateCompaniesTable extends Migration
 
             $table->increments('id');
             $table->string('name');
-            $table->text('description')->nullablie;
+            $table->text('description')->nullable();
             $table->string('street');
             $table->integer('number');
             $table->string('insertion')->nullable();
             $table->string('zipcode');
-            $table->unsignedInteger('place_id');
+            $table->string('city');
+            $table->text('argumentation')->nullable();
+            $table->unsignedInteger('status_id');
+            $table->unsignedInteger('company_status_id');
             $table->timestamps();
 
-            $table->foreign('place_id')->references('id')->on('places');
+            $table->foreign('status_id')->references('id')->on('statuses');
+            $table->foreign('company_status_id')->references('id')->on('statuses');
         });
     }
 

@@ -4,8 +4,6 @@ use Faker\Generator as Faker;
 
 $factory->define(\App\Company::class, function (Faker $faker) use ($factory) {
 
-    $place = $factory->create(\App\Place::class);
-
     return [
         'name' => $faker->company,
         'description' => implode("",$faker->sentences($nb = 3, $asText = false)),
@@ -13,6 +11,8 @@ $factory->define(\App\Company::class, function (Faker $faker) use ($factory) {
         'number' => $faker->buildingNumber,
         'insertion' => $faker->streetSuffix,
         'zipcode' => $faker->postcode,
-        'place_id' => $place->id
+        'city' => $faker->city,
+        'status_id' => \App\Status::where('type',null)->get()->random()->id,
+        'company_status_id' => \App\Status::where('type','company')->get()->random()->id
     ];
 });

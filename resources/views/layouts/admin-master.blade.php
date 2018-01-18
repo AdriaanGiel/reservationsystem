@@ -13,7 +13,16 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="{{ asset("css/vendor.css") }}" type="text/css" rel="stylesheet" media="screen,projection"/>
     <link href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" media="screen,projection">
+    @yield('css')
     <link href="{{ asset("css/app.css") }}" type="text/css" rel="stylesheet" media="screen,projection"/>
+
+
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('favicon/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon/favicon-16x16.png') }}">
+    <link rel="manifest" href="{{ asset('favicon/manifest.json') }}">
+    <meta name="theme-color" content="#ffffff">
 
 </head>
 <body class="full-screen-height">
@@ -22,8 +31,8 @@
         <nav class="red-background" role="navigation">
             <div class="nav-wrapper container"><a id="logo-container" href="{{ route('admin')  }}" class="brand-logo">Admin</a>
                 <ul class="right hide-on-med-and-down">
-                    <li><a href="{{ route('admin.companies.index') }}">Bedrijven</a></li>
                     <li><a href="{{ route('admin.assignments.index') }}">Afspraken</a></li>
+                    <li><a href="{{ route('admin.companies.index') }}">Bedrijven</a></li>
                     <li><a href="{{ route('admin.users.index') }}">Medewerkers</a></li>
                     @if(Auth::check())
                         <li>
@@ -33,15 +42,26 @@
                                 Logout
                             </a>
                         </li>
-                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        <form id="logout-form-desktop" action="{{ route('logout') }}" method="POST" style="display: none;">
                             {{ csrf_field() }}
                         </form>
                     @endif
                 </ul>
 
                 <ul id="nav-mobile" class="side-nav">
-                    <li><a href="{{ route('admin.companies.index') }}">Bedrijven</a></li>
+                    <li><div class="user-view">
+                            <div class="background">
+                                <img src="{{ asset('img/KYC_logo_embleem_5bzwart_5d.jpg')  }}">
+                            </div>
+                            <a href="#!user"><img class="circle" src="{{ asset('img/default-user.png')  }}"></a>
+                            @if(Auth::check())
+                                <a href="#!name"><span class="white-text name">{{ Auth::user()->profile->fullName()  }}</span></a>
+                                <a href="#!email"><span class="white-text email">{{ Auth::user()->email  }}</span></a>
+                            @endif
+                        </div>
+                    </li>
                     <li><a href="{{ route('admin.assignments.index') }}">Afspraken</a></li>
+                    <li><a href="{{ route('admin.companies.index') }}">Bedrijven</a></li>
                     <li><a href="{{ route('admin.users.index') }}">Medewerkers</a></li>
                     @if(Auth::check())
                         <li>
@@ -79,7 +99,10 @@
 <!-- Scripts -->
 <script src="{{ asset("js/manifest.js") }}"></script>
 <script src="{{ asset("js/vendor.js") }}"></script>
-<script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+
+
+@yield('before_general')
+
 <script src="{{ asset("js/admin.js") }}"></script>
 
 

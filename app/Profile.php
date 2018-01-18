@@ -9,8 +9,15 @@ class Profile extends Model
     protected $fillable = [
         'firstname',
         'lastname',
+        'phonenumber',
         'profile_picture',
         'hours',
-        'user_id'
     ];
+
+
+    public function fullName()
+    {
+        return "{$this->firstname} {$this->lastname}";
+    }
+
 }

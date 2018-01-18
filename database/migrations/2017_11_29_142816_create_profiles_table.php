@@ -21,7 +21,8 @@ class CreateProfilesTable extends Migration
             $table->increments('id');
             $table->string('firstname');
             $table->string('lastname');
-            $table->string('profile_picture');
+            $table->string('phonenumber');
+            $table->string('profile_picture')->default('default-user.png');
             $table->decimal('hours');
             $table->unsignedInteger('user_id');
             $table->timestamps();

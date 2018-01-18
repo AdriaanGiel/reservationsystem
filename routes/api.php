@@ -19,10 +19,17 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::middleware(['auth'])->group(function(){
-
+    RouteGenerator::generate('post','userdata',\Front\UserController::class,'@getUserData');
+    RouteGenerator::generate('get','assignments/calendardata',\Front\AssignmentController::class,'@getCalendarData');
+    RouteGenerator::generate('post','companies',\Front\CompanyController::class,'@getCompanies');
+    RouteGenerator::generate('post','validate/assignment',\Front\AssignmentController::class,'@validateAssignment');
 });
 
 
-Route::middleware(['admin'])->group(function(){
-    RouteGenerator::generate('get','test',\Admin\AssignmentController::class,'@getAssignments');
+Route::middleware(['admin'])->prefix('admin')->group(function(){
+
+    RouteGenerator::generate('get','assignments',\Admin\AssignmentController::class,'@getAssignments');
+    RouteGenerator::generate('post','users',\Admin\UserController::class,'@getUsers');
+    RouteGenerator::generate('post','validate/company',\Admin\CompanyController::class,'@validateCompany');
+    RouteGenerator::generate('post','validate/assignment',\Admin\AssignmentController::class,'@validateAssignment');
 });

@@ -3,8 +3,13 @@
 namespace App\Http\Controllers\Front;
 
 use App\Assignment;
+use App\AssignmentType;
+use App\Company;
+use App\Http\Requests\Front\AssignmentRequest;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use function MongoDB\BSON\toJSON;
 
 class AssignmentController extends Controller
 {
@@ -15,9 +20,33 @@ class AssignmentController extends Controller
      */
     public function index()
     {
-        $assignment  = Assignment::all();
+        $assignment  = \Auth::user()->no_examination();
 
-        return view('assignment.index',compact('assignment'));
+        return view('front.assignment.index',compact('assignment'));
+    }
+
+    public function allIndex()
+    {
+        $assignments = Assignment::with(['company:id,name','user:id,name','type:id,name'])->get()->toJson();
+        return view('front.assignment.index',compact('assignments'));
+    }
+
+    public function getCalendarData()
+    {
+        $data = \Auth::user()->examined_approved()->map(function($assignment){
+            $assignment->load(['company']);
+            $date = Carbon::createFromFormat('Y-m-d H:m:s',"{$assignment->date} {$assignment->start_time}");
+            $assignment->title = $assignment->company->name;
+            $assignment->formatted_date = $date->toFormattedDateString();
+            $assignment->start = "{$assignment->date} {$assignment->start_time}";
+            $assignment->end = "{$assignment->date} {$assignment->start_time}";
+            $assignment->color = '#F13385';
+            return $assignment;
+        });
+
+//        dd($data->last());
+
+        return Response()->json($data);
     }
 
     /**
@@ -25,9 +54,16 @@ class AssignmentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        return view('assignment.create');
+        $date = Carbon::createFromTimestamp($request->input('start'))->toDateString();
+        $types = AssignmentType::all();
+        return view('front.assignment.create',compact('types','date'));
+    }
+
+    public function validateAssignment(AssignmentRequest $request)
+    {
+        return 'true';
     }
 
     /**
@@ -38,8 +74,11 @@ class AssignmentController extends Controller
      */
     public function store(Request $request)
     {
-
-        return redirect();
+        $data = array_merge($request->all(),['user_id' => \Auth::user()->id]);
+        $data['company_id'] = Company::where('name',$request->input('company'))->first()->id;
+        $data['status_id'] = 2;
+        Assignment::create($data);
+        return redirect(route('assignments.index'));
     }
 
     /**
@@ -50,8 +89,7 @@ class AssignmentController extends Controller
      */
     public function show(Assignment $assignment)
     {
-        //
-        
+        return view('front.assignment.show',compact('assignment'));
     }
 
     /**
@@ -62,7 +100,8 @@ class AssignmentController extends Controller
      */
     public function edit(Assignment $assignment)
     {
-        //
+        $types = AssignmentType::all()->toJSON();
+        return view('front.assignment.edit',compact('assignment','types'));
     }
 
     /**
@@ -74,7 +113,9 @@ class AssignmentController extends Controller
      */
     public function update(Request $request, Assignment $assignment)
     {
-        //
+//        dd($request->all());
+       $assignment->update($request->all());
+       return redirect(route('assignments.edit',$assignment->id));
     }
 
     /**
@@ -85,6 +126,9 @@ class AssignmentController extends Controller
      */
     public function destroy(Assignment $assignment)
     {
-        //
+        if($assignment->delete()){
+            return true;
+        }
+        return false;
     }
 }

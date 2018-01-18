@@ -22,7 +22,13 @@
 
 <script>
     export default {
-        name: "worker"
+        name: "worker",
+        props:['workerObject'],
+        data(){
+            return {
+                worker: this.worker
+            }
+        }
     }
 </script>
 

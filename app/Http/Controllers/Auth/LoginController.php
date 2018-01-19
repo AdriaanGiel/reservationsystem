@@ -49,13 +49,4 @@ class LoginController extends Controller
             ?: redirect()->intended($this->redirectPath());
     }
 
-    public function redirectTo()
-    {
-        if(\Auth::user()->isAdmin()){
-
-            return redirect(route('admin'));
-        }
-         return $this->redirectTo;
-    }
-
 }

@@ -6,32 +6,32 @@
                     <span class="card-title">Persoonlijke gegevens</span>
                     <div class="row">
                         <div class="input-field col s12">
-                            <input v-model="user.email" :value="user.email" name="email" id="email" type="email"
+                            <input v-model="user.email" name="email" id="email" type="email"
                                    class="">
                             <label :class="classActive" for="email">Email</label>
                         </div>
 
                         <div class="input-field col s12">
-                            <input v-model="user.profile.firstname" :value="user.profile.firstname" name="firstname"
+                            <input v-model="user.profile.firstname"  name="firstname"
                                    id="firstname" type="text" class="">
                             <label :class="classActive" for="firstname">Voornaam</label>
                         </div>
 
                         <div class="input-field col s12">
-                            <input v-model="user.profile.lastname" :value="user.profile.lastname" name="lastname"
+                            <input v-model="user.profile.lastname"name="lastname"
                                    id="lastname" type="text" class="">
                             <label :class="classActive" for="lastname">Achternaam</label>
                         </div>
 
                         <div class="input-field col s12">
-                            <input v-model="user.profile.phonenumber" :value="user.profile.phonenumber"
+                            <input v-model="user.profile.phonenumber"
                                    name="phonenumber" id="phonenumber" type="tel"
                                    class="">
                             <label for="phonenumber" :class="classActive">Telefoonnummer</label>
                         </div>
 
                         <div class="input-field col s12">
-                            <input disabled :value="user.profile.hours" name="hours" id="hours" type="number" class="">
+                            <input disabled v-model="user.profile.hours" name="hours" id="hours" type="number" class="">
                             <label for="hours">Uren</label>
                         </div>
 

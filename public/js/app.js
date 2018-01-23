@@ -6548,7 +6548,8 @@ var app = new Vue({
     methods: {
         removeSideBar: function removeSideBar() {
             $("#sidenav-overlay").trigger("click");
-        }
+        },
+        closeSideNav: function closeSideNav() {}
     }
 });
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(5)))
@@ -7511,7 +7512,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             $('select').material_select();
         },
         setUpDatePicker: function setUpDatePicker() {
-            $('.datepicker').pickadate({
+            console.log(this.date);
+            var $date = $('.datepicker').pickadate({
                 selectMonths: true, // Creates a dropdown to control month
                 selectYears: 15, // Creates a dropdown of 15 years to control year,
                 today: 'Today',
@@ -7519,9 +7521,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 close: 'Ok',
                 closeOnSelect: false // Close upon selecting a date,
             });
+
+            if (this.date != "") {
+                $date.pickadate('picker').set('select', this.date, { format: 'yyyy-mm-dd' });
+            }
         },
         setUpTimePicker: function setUpTimePicker() {
-            $('.timepicker').pickatime({
+            var $time = $('.timepicker').pickatime({
                 default: 'now', // Set default time: 'now', '1:30AM', '16:30'
                 fromnow: 0, // set default time to * milliseconds from now (using with default = 'now')
                 twelvehour: false, // Use AM/PM or 24-hour format
@@ -7532,6 +7538,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 ampmclickable: true, // make AM PM clickable
                 aftershow: function aftershow() {} //Function for after opening timepicker
             });
+
+            if (this.time != "") {
+                $time.val(this.time);
+            }
         }
     }
 });
@@ -7797,33 +7807,7 @@ var render = function() {
                         ])
                       : _vm._e(),
                     _vm._v(" "),
-                    _c("div", { staticClass: "input-field col s12" }, [
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.date,
-                            expression: "date"
-                          }
-                        ],
-                        staticClass: "datepicker",
-                        attrs: { name: "date", id: "date_form", type: "text" },
-                        domProps: { value: _vm.date },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.date = $event.target.value
-                          }
-                        }
-                      }),
-                      _vm._v(" "),
-                      _c("label", { attrs: { for: "date_form" } }, [
-                        _vm._v("Datum")
-                      ])
-                    ]),
+                    _vm._m(0),
                     _vm._v(" "),
                     _vm.errors
                       ? _c("error-message", {
@@ -7836,28 +7820,11 @@ var render = function() {
                       { staticClass: "input-field col s12" },
                       [
                         _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.time,
-                              expression: "time"
-                            }
-                          ],
                           staticClass: "timepicker",
                           attrs: {
                             name: "start_time",
                             id: "time_form",
                             type: "text"
-                          },
-                          domProps: { value: _vm.time },
-                          on: {
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.time = $event.target.value
-                            }
                           }
                         }),
                         _vm._v(" "),
@@ -7975,7 +7942,21 @@ var render = function() {
     )
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-field col s12" }, [
+      _c("input", {
+        staticClass: "datepicker",
+        attrs: { name: "date", id: "date_form", type: "text" }
+      }),
+      _vm._v(" "),
+      _c("label", { attrs: { for: "date_form" } }, [_vm._v("Datum")])
+    ])
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {

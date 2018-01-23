@@ -31,6 +31,9 @@ const app = new Vue({
     methods:{
         removeSideBar() {
             $("#sidenav-overlay").trigger("click")
+        },
+        closeSideNav(){
+
         }
     }
 });

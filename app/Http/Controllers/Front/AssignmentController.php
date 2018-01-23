@@ -79,10 +79,12 @@ class AssignmentController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
         $data = array_merge($request->all(),['user_id' => \Auth::user()->id]);
         $data['company_id'] = Company::where('name',$request->input('company'))->first()->id;
         $data['status_id'] = 2;
+        $date = new Carbon($data['date']);
+        $data['date'] = $date->toDateString();
+
         Assignment::create($data);
         return redirect(route('assignments.index'));
     }

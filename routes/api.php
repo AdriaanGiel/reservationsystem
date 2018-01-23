@@ -21,6 +21,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::middleware(['auth'])->group(function(){
     RouteGenerator::generate('post','userdata',\Front\UserController::class,'@getUserData');
     RouteGenerator::generate('get','assignments/calendardata',\Front\AssignmentController::class,'@getCalendarData');
+    RouteGenerator::generate('get','assignments/{type}',\Front\AssignmentController::class,'@getAssignmentsByType');
     RouteGenerator::generate('post','companies',\Front\CompanyController::class,'@getCompanies');
     RouteGenerator::generate('post','validate/assignment',\Front\AssignmentController::class,'@validateAssignment');
 });

@@ -29,22 +29,27 @@
 
             <ul id="dropdown2" class="dropdown-content">
                 <li><a href="{{ route('assignments.index') }}">Rooster</a></li>
-                <li><a href="{{ route('assignments.create') }}">Lijst</a></li>
+                <li><a @click="closeSideNav" href="{{ route('assignment.types') }}#/approved">Goedgekeurd</a></li>
+                <li><a @click="closeSideNav" href="{{ route('assignment.types') }}#/pending">In afwachting</a></li>
+                <li><a @click="closeSideNav" href="{{ route('assignment.types') }}#/rejected">Afgekeurd</a></li>
+
             </ul>
 
             <ul id="dropdown3" class="dropdown-content">
                 <li><a href="{{ route('assignments.index') }}">Rooster</a></li>
-                <li><a href="{{ route('assignments.create') }}">Lijst</a></li>
+                <li><a href="{{ route('assignment.types') }}#/approved">Goedgekeurd</a></li>
+                <li><a href="{{ route('assignment.types') }}#/pending">In afwachting</a></li>
+                <li><a href="{{ route('assignment.types') }}#/rejected">Afgekeurd</a></li>
             </ul>
 
-            {{--class="dropdown-button" href="#!"  data-activates="dropdown3"--}}
+
 
 
             <nav class="light-blue lighten-1" role="navigation">
-                <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">KnowYourCity</a>
+                <div class="nav-wrapper container"><a id="logo-container" href="{{route('assignments.index')}}" class="brand-logo">KnowYourCity</a>
                     <ul class="right hide-on-med-and-down">
                         {{--<li><a href="{{ route('home') }}">Home</a></li>--}}
-                        <li><a href="{{route('assignments.index')}}" >Afspraken<i class="material-icons right"></i></a></li>
+                        <li class="dropdown-button" href="#!"  data-activates="dropdown3"><a href="{{route('assignments.index')}}" >Afspraken<i class="material-icons right">arrow_drop_down</i></a></li>
                         <li><a href="{{ route('user.profile') }}#/dashboard">Profiel</a></li>
                         @if(Auth::check())
                             @if(Auth::user()->isAdmin())
@@ -67,7 +72,7 @@
 
                     <ul id="nav-mobile" class="side-nav">
                         {{--<li><a href="{{ route('home') }}">Home</a></li>--}}
-                        <li><a href="{{route('assignments.index')}}">Afspraken<i class="material-icons right">arrow_drop_down</i></a></li>
+                        <li class="dropdown-button" href="#!"  data-activates="dropdown2"><a href="{{route('assignments.index')}}">Afspraken<i class="material-icons right">arrow_drop_down</i></a></li>
                         <li><a @click="removeSideBar" href="{{ route('user.profile') }}#/dashboard">Profiel</a></li>
                         @yield('nav-item')
                         @if(Auth::check())

@@ -8,6 +8,10 @@
 
     <assignments-form
             title="maken"
+            method="POST"
+            token="{{csrf_token()}}"
+            route="{{route('admin.assignments.store')}}"
+            :types="{{$types}}"
     ></assignments-form>
 
 @endsection

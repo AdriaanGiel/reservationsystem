@@ -19,7 +19,6 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role_id'
     ];
 
     protected $with = ['profile'];
@@ -50,6 +49,13 @@ class User extends Authenticatable
             ->get();
     }
 
+    public function makeAdmin()
+    {
+        $this->role_id = 2;
+        $this->save();
+
+        return $this;
+    }
     public function examined_wrong()
     {
         return $this->assignments()

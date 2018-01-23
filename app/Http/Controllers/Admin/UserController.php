@@ -25,18 +25,15 @@ class UserController extends Controller
         return view('admin.workers.index',compact('workers'));
     }
 
-    public function getUser(Request $search)
+    public function getUsers(Request $search)
     {
-        $users = User::workersQuery()->where(function($query) use ($search){
-            $query->where('name', 'LIKE', "$search%")
-                ->orWhere('profile.firstname','LIKE', "$search%")
-                ->orWhere('profile.lastname','LIKE', "$search%");
-        })->get();
+        $users = User::all();
 
-        return $users->map(function($user){
-            return [$user->profile->fullName() => $user->id];
-        });
+        foreach ($users as $user){
+            $data["{$user->profile->fullName()} - {$user->email}"] = NULL;
+        }
 
+        return Response()->json($data);
     }
 
     /**
@@ -58,12 +55,17 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+
         $data = array_merge($request->all(), [
             'name' => "{$request->input('firstname')} {$request->input('lastname')}",
             'password' => bcrypt(str_random(10))
         ]);
         $user = User::create($data);
         $user->profile()->create($data);
+        if($request->input('role_id') == 2){
+            $user->makeAdmin();
+        }
+
         $request->session()->flash('success-message', "Het toevoegen van medewerker {$user->name} is gelukt.");
         return redirect(route('admin.users.index'));
     }
@@ -101,9 +103,21 @@ class UserController extends Controller
      */
     public function update(Request $request, User $worker)
     {
+        if($request->input('new_password') != null){
+            $worker->password = bcrypt($request->input('new_password'));
+            $worker->save();
+        }
+
         $worker->update($request->all());
+        $worker->profile()->update([
+            'firstname' => $request->input('firstname'),
+            'lastname' => $request->input('lastname'),
+            'hours' => $request->input('hours'),
+            'phonenumber' => $request->input('phonenumber'),
+        ]);
+
         $request->session()->flash('success-message', "Het bewerken van medewerker {$worker->name} is gelukt.");
-        return redirect(route('admin.users.show',$worker->id));
+        return redirect(route('admin.users.index'));
     }
 
     /**

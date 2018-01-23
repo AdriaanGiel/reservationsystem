@@ -111,11 +111,18 @@
                     navLinks: true,
                     contentHeight: 600,
                     events: "/api/assignments/calendardata/",
+                    timeFormat: 'H(:mm)',
                     eventClick(event,jsEvent,view){
                         $this.showEvent(event);
                     },
                     select(start,end,jsEvent){
-                        window.location.href = '/assignments/create?start='+start.format('X');
+                        let time = new Date().getTime();
+                        if(start._i < time){
+                            Materialize.toast('Deze datum is al geweest, kies een ander datum.', 4000);
+                        }else{
+                            Materialize.toast('Even wachten...', 4000);
+                            window.location.href = '/assignments/create?start='+start.format('X')+"&time="+start.format("HH:mm");
+                        }
                     }
                 })
             },

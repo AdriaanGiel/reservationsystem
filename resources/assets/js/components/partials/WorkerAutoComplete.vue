@@ -1,9 +1,9 @@
 <template>
     <div>
         <div class="input-field col s12">
-            <input name="user" v-model="autoValue" type="text" id="autocomplete-input"
-                   @loading="isLoading()" :disabled="loading" class="autocomplete">
-            <label for="autocomplete-input">Kies bedrijf</label>
+            <input  name="user" v-model="autoValue" type="text" id="autocomplete-input"
+                   @loading="isLoading()" :disabled="loading" autocomplete="false" class=" workers">
+            <label for="autocomplete-input">Kies medewerker</label>
             <slot name="error"></slot>
         </div>
     </div>
@@ -12,6 +12,9 @@
 <script>
     export default {
         name: "worker-auto-complete",
+        props:{
+            option:{default:false}
+        },
         data(){
             return{
                 autoValue:"",
@@ -19,26 +22,36 @@
                 users:{}
             }
         },
+        mounted(){
+            let $this = this;
+            $(function(){
+                $this.getWorkers();
+            });
+        },
         methods:{
             isLoading(){
                 this.loading = !this.loading;
             },
-            setUpAutoComplete() {
+            setUpAutoComplete(data) {
+                this.$emit('loaded');
+                console.log(data);
                 let $this = this;
-                $('input.autocomplete').autocomplete({
-                    source: function(request,response){
-                        axios.post('/api/admin/users', {
-                            value: $this.autoValue
-                        }).then(res => response(res.data)).catch(function (error) {
-                            console.log(error)
-                        })},
-                    select:function(val,b){
-                        $this.autoValue = b.item.value;
+                $('input.workers').autocomplete({
+                    data: data,
+                    onAutocomplete: function (val) {
+                        console.log(val);
+                        $this.autoValue = val;
                     },
                     limit: 5,
                     minLength: 1,
                 });
-
+            },
+            getWorkers(){
+                axios.post('/api/admin/users',{
+                    value: this.autoValue
+                }).then(res => this.setUpAutoComplete(res.data)).catch(function (error) {
+                    console.log(error);
+                })
             }
         }
     }

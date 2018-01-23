@@ -28,7 +28,7 @@ class AssignmentController extends Controller
     public function allIndex()
     {
         $assignments = Assignment::with(['company:id,name','user:id,name','type:id,name'])->get()->toJson();
-        return view('front.assignment.index',compact('assignments'));
+        return view('front.assignment.indexes',compact('assignments'));
     }
 
     public function getCalendarData()
@@ -36,17 +36,21 @@ class AssignmentController extends Controller
         $data = \Auth::user()->examined_approved()->map(function($assignment){
             $assignment->load(['company']);
             $date = Carbon::createFromFormat('Y-m-d H:m:s',"{$assignment->date} {$assignment->start_time}");
+            $new_data = new Carbon("{$assignment->date} {$assignment->time}");
             $assignment->title = $assignment->company->name;
             $assignment->formatted_date = $date->toFormattedDateString();
-            $assignment->start = "{$assignment->date} {$assignment->start_time}";
-            $assignment->end = "{$assignment->date} {$assignment->start_time}";
+            $assignment->start = $new_data->toDateTimeString();
+            $assignment->end = $new_data->addHours(5)->toDateTimeString();
             $assignment->color = '#F13385';
             return $assignment;
         });
 
-//        dd($data->last());
-
         return Response()->json($data);
+    }
+
+    public function getAssignmentsByType($type){
+        $assignments = Assignment::getByType($type);
+        return $assignments;
     }
 
     /**
@@ -57,8 +61,9 @@ class AssignmentController extends Controller
     public function create(Request $request)
     {
         $date = Carbon::createFromTimestamp($request->input('start'))->toDateString();
+        $time = $request->input('time');
         $types = AssignmentType::all();
-        return view('front.assignment.create',compact('types','date'));
+        return view('front.assignment.create',compact('types','date','time'));
     }
 
     public function validateAssignment(AssignmentRequest $request)
@@ -74,6 +79,7 @@ class AssignmentController extends Controller
      */
     public function store(Request $request)
     {
+        dd($request->all());
         $data = array_merge($request->all(),['user_id' => \Auth::user()->id]);
         $data['company_id'] = Company::where('name',$request->input('company'))->first()->id;
         $data['status_id'] = 2;

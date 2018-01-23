@@ -21,9 +21,9 @@
                             <td>{{ worker.email }}</td>
                             <td>{{ worker.profile.hours }}</td>
                             <td>
-                                <a :href="worker.showRoute" class="btn blue darken-1 small-buttons">
-                                    <i class="material-icons">remove_red_eye</i>
-                                </a>
+                                <!--<a :href="worker.showRoute" class="btn blue darken-1 small-buttons">-->
+                                    <!--<i class="material-icons">remove_red_eye</i>-->
+                                <!--</a>-->
 
                                 <a :href="worker.editRoute" class="btn orange darken-3 small-buttons">
                                     <i class="material-icons">create</i>

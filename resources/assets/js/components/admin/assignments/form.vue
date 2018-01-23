@@ -3,7 +3,7 @@
         <form @submit.prevent="validateForm" id="assignment-edit" :action="route" method="POST">
 
 
-            <form-required method="method" token="token"></form-required>
+            <form-required :method="method" :token="token"></form-required>
 
             <div class="col s12">
                 <div class="card">
@@ -13,14 +13,13 @@
                         </div>
 
                         <div class="row">
-
+                            <worker-auto-complete></worker-auto-complete>
                         </div>
 
                         <div class="row">
                             <company-auto-complete option="true" v-if="!editForm"
                                                    v-on:activateNewCompany="showCompanyForm"></company-auto-complete>
                         </div>
-
 
                         <div v-if="editForm" class="row">
                             <div class="input-field col s12">
@@ -30,15 +29,19 @@
                             </div>
                         </div>
 
+                        <div class="row">
+                            <material-select label="Kies afspraak type" name="assignment_type_id" :items="types" :compare-selected="type"></material-select>
+                        </div>
+
 
                         <div class="row">
                             <div class="input-field col s12">
-                                <input v-model="date" type="text" id="date" name="date" class="datepicker">
+                                <input type="text" id="date" name="date" class="datepicker">
                                 <label for="date">Datum</label>
                             </div>
 
                             <div class="input-field col s12">
-                                <input v-model="time" type="text" id="time" name="time" class="timepicker">
+                                <input type="text" id="time" name="start_time" class="timepicker">
                                 <label for="time">Tijd</label>
                             </div>
                         </div>
@@ -46,7 +49,7 @@
                         <div class="row">
                             <div class="input-field col s6">
                                 <input v-model="hours" type="number" id="hours" name="hours">
-                                <label for="Hours">Uren</label>
+                                <label for="hours">Uren</label>
                             </div>
                         </div>
 
@@ -59,9 +62,9 @@
 
                     </div>
                     <div class="card-action flex flex-center">
-                        <a :disabled="validateLoad" class="waves-effect waves-light btn red-background">Versturen <i v-if="validateLoad"
+                        <button type="submit" :disabled="validateLoad" class="waves-effect waves-light btn red-background">Versturen <i v-if="validateLoad"
                                                                                             class="fa fa-refresh fa-spin"
-                                                                                            aria-hidden="true"></i></a>
+                                                                                            aria-hidden="true"></i></button>
                     </div>
                 </div>
             </div>
@@ -85,13 +88,20 @@
             token: {},
             method: {},
             route:{},
+            types:{required:true},
+            editForm:{default:false},
+            date:{default:''},
+            time:{default:''},
+            type:{default:null}
         },
         data() {
             return {
                 companyForm: false,
                 validateLoad:false,
                 assignment:this.assignmentObject,
-                company:this.companyObject
+                company:this.companyObject,
+                hours:"",
+                description:"",
             }
         },
         components: {
@@ -103,12 +113,13 @@
         },
         methods: {
             showCompanyForm() {
-                console.log('saasdasd');
                 this.companyForm = !this.companyForm;
             },
             validateForm() {
                 let formData = $('#assignment-edit').serializeArray();
                 let data  = {};
+
+                console.log('sdadasd');
 
                 formData.forEach(function(input){
                     if(String(input.name) != '_method' && String(input.name) != '_token'){
@@ -131,13 +142,16 @@
                 this.errors = errors.response.data.errors;
                 this.validateLoad = false;
                 this.$emit('loading');
+            },
+            check(){
+                console.log('tdS')
             }
 
         },
         mounted() {
             $('select').material_select();
 
-            $('.datepicker').pickadate({
+            let $date = $('.datepicker').pickadate({
                 selectMonths: true, // Creates a dropdown to control month
                 selectYears: 15, // Creates a dropdown of 15 years to control year,
                 today: 'Today',
@@ -146,7 +160,12 @@
                 closeOnSelect: false // Close upon selecting a date,
             });
 
-            $('.timepicker').pickatime({
+            if(this.date != ""){
+                $date.pickadate('picker').set('select',this.date,{format:'yyyy-mm-dd'});
+            }
+
+            let $this = this;
+            let $time = $('.timepicker').pickatime({
                 default: 'now', // Set default time: 'now', '1:30AM', '16:30'
                 fromnow: 0,       // set default time to * milliseconds from now (using with default = 'now')
                 twelvehour: false, // Use AM/PM or 24-hour format
@@ -156,8 +175,12 @@
                 autoclose: false, // automatic close timepicker
                 ampmclickable: true, // make AM PM clickable
                 aftershow: function () {
-                } //Function for after opening timepicker
+                }//Function for after opening timepicker
             });
+
+            if(this.time != ""){
+                $time.val($this.time);
+            }
         }
     }
 </script>

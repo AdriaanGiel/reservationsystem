@@ -4,15 +4,18 @@
             <input type="hidden" name="_token" :value="csrfToken">
             <input v-if="editAssignement" type="hidden" name="_method" value="PATCH">
             <div class="col s12">
+
+
                 <div class="card">
+                    <loader v-show="loading"></loader>
                     <div class="card-content">
+
                     <span class="card-title">
                         Afspraak {{ title }}
                     </span>
-
                         <div class="row">
 
-                            <company-auto-complete option="true" v-if="!editAssignement">
+                            <company-auto-complete @loaded="loadLoader" option="true" v-if="!editAssignement">
                                 <error-message v-if="errors" slot="error" :errors="errors.company"></error-message>
                             </company-auto-complete>
 
@@ -31,7 +34,7 @@
                             <error-message v-if="errors" :errors="errors.date"></error-message>
 
                             <div class="input-field col s12">
-                                <input name="start_time" id="time_form" type="text" class="timepicker">
+                                <input v-model="time" name="start_time" id="time_form" type="text" class="timepicker">
                                 <label for="time_form">Start tijd</label>
                                 <error-message v-if="errors" :errors="errors.start_time"></error-message>
                             </div>
@@ -82,6 +85,7 @@
     import CompanyAutoComplete from '../../partials/CompanyAutoComplete.vue';
     import MaterialSelect from '../../partials/MaterialSelect.vue';
     import ErrorMessage from '../../partials/messages/errorMessage.vue';
+    import Loader from '../../partials/loader.vue';
 
     export default {
         props: {
@@ -100,13 +104,14 @@
             editAssignement: {
                 default: false
             },
-            date: {}, time: {}, reason: {}, hours: {}, description: {}, company: {}
+            dateObject: {}, timeObject: {}, reason: {}, hours: {}, description: {}, company: {}
         },
         components: {
             'company-form': CompanyForm,
             'company-auto-complete': CompanyAutoComplete,
             'material-select': MaterialSelect,
-            'error-message': ErrorMessage
+            'error-message': ErrorMessage,
+            'loader': Loader,
         },
         data() {
             return {
@@ -127,7 +132,10 @@
                     hours: {},
                     assignment_type_id: {},
                     description: {}
-                }
+                },
+                loading:true,
+                time: this.timeObject,
+                date: this.dateObject
             }
         },
         mounted() {
@@ -136,13 +144,18 @@
             this.setUpSelect();
         },
         methods: {
+            loadLoader(){
+                console.log('asdsa');
+                this.loading = !this.loading;
+            },
             showCompanyForm() {
                 this.companyForm = !this.companyForm;
             },
             validateForm() {
+                console.log(this.time);
                 let formData = $('#assignment-create').serializeArray();
                 let data = {};
-
+                this.loadLoader();
                 formData.forEach(function (input) {
                     if (String(input.name) != '_method' && String(input.name) != '_token') {
                         data[input.name] = input.value;
@@ -164,6 +177,7 @@
             handleValidationErrors(errors) {
                 this.errors = errors.response.data.errors;
                 this.validateLoad = false;
+                this.loadLoader();
             },
             setUpSelect() {
                 $('select').material_select();

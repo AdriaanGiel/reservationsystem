@@ -13,12 +13,6 @@
 
 @section('javascript')
 
-    @if(Session::has('success-message'))
-        @include('partial.success-message',[
-        'message_title' => "Gelukt!",
-        'message_body' => session('success-message'),
-        'message_type' => 'success'
-        ])
-    @endif
+
 
 @endsection

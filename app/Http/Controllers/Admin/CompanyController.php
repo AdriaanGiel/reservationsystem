@@ -48,6 +48,7 @@ class CompanyController extends Controller
         $company = Company::create($data);
         $company->approve();
 
+        $request->session()->flash('success-message', "Het toevoegen van het bedrijf " . $company->name . " is gelukt");
         return redirect(route('admin.companies.index'));
     }
 

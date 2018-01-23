@@ -3,7 +3,7 @@
     <div>
         <div v-show="!newCompany" class="input-field col s12">
             <input name="company" v-model="autoValue" type="text" id="autocomplete-input"
-               @loading="isLoading()" :disabled="loading" class="autocomplete">
+                   @loading="isLoading()" :disabled="loading" autocomplete="false" class="autocomplete">
             <label for="autocomplete-input">Kies bedrijf</label>
             <slot name="error"></slot>
         </div>
@@ -29,46 +29,42 @@
             return {
                 newCompany: false,
                 autoValue: "",
-                companies:{},
-                loading:false
+                companies: {},
+                loading: false
             }
         },
         mounted() {
+            let $this = this;
             if (!this.newCompany) {
-                this.setUpAutoComplete();
+                $(function () {
+                    $this.getCompanies();
+                });
             }
         },
         methods: {
-            isLoading(){
-              this.loading = !this.loading;
-            },
             activateNewCompany() {
                 this.autoValue = "";
                 this.$emit('activateNewCompany', this.newCompany)
             },
-            setUpAutoComplete() {
-                    let $this = this;
-                    $('input.autocomplete').autocomplete({
-                        source: function(request,response){
-                            axios.post('/api/companies', {
-                            value: $this.autoValue
-                        }).then(res => response(res.data)).catch(function (error) {
-                            console.log(error)
-                        })},
-                        select:function(val,b){
-                            console.log(b);
-                            $this.autoValue = b.item.value;
-                        },
-                        limit: 5,
-                        minLength: 1,
-                    });
+            setUpAutoComplete(data) {
+                this.$emit('loaded');
+                let $this = this;
+                $('input.autocomplete').autocomplete({
+                    data: data,
+                    onAutocomplete: function (val) {
+                        console.log(val);
+                        $this.autoValue = val;
+                    },
+                    limit: 5,
+                    minLength: 1,
+                });
 
             },
-            getCompanies(){
+            getCompanies() {
                 axios.post('/api/companies', {
                     value: this.autoValue
-                }).then(res => this.companies = res.data).catch(function (error) {
-                    console.log(error)
+                }).then(res => this.setUpAutoComplete(res.data)).catch(function (error) {
+                    // response(['Sorry niks gevonden']);
                 });
             }
         }

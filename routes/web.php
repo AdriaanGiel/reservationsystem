@@ -21,32 +21,8 @@ Route::match(['get','post'],'register',function(){
 });
 
 Route::get('test',function(){
-
-    $assignment = Auth::user()->assignments()->latest()->first();
-
-    $check = "{$assignment->date}";
-    $check2 = "{$assignment->start_time}";
-
-    $date = \Carbon\Carbon::createFromFormat('Y-m-d',$check);
-    $time = \Carbon\Carbon::createFromFormat('H:m:s',$check2);
-
-
-    $l = $time->addHour((int)$assignment->hours);
-
-
-    $l = \Carbon\Carbon::createFromFormat('Y-m-d H:m:s',"{$date->toDateString()} {$time->toTimeString()}");
-
-
-    $assignment->title = $assignment->company->name;
-    $assignment->formatted_date = $date->toFormattedDateString();
-    $assignment->start = $date->toDateTimeString();
-
-
-    $assignment->end = $date->addHours(\Carbon\Carbon::createFromFormat("H",round($assignment->hours))->toTimeString())->toDateTimeString();
-    $assignment->color = '#F13385';
-
-    dd($assignment);
-
+    $assignments = \App\Assignment::getByType('approved');
+    return $assignments;
 });
 
 Route::get('/', 'HomeController@index')->name('home');
@@ -57,6 +33,7 @@ Route::middleware('auth')->group(function(){
     routeGenerator::generate('patch','user/profile',\Front\UserController::class,'@update')->name('user.profile.update');
     routeGenerator::generate('post','user/profile/password',\Front\UserController::class,'@passwordUpdate')->name('user.profile.password');
 
+    RouteGenerator::generate('get','assignments/types',\Front\AssignmentController::class,'@allIndex')->name('assignment.types');
     RouteGenerator::generateResource('assignments',\Front\AssignmentController::class);
     RouteGenerator::generate('get','companies',\Front\CompanyController::class,'@index')->name('companies.index');
 

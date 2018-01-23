@@ -25,7 +25,7 @@ class AssignmentRequest extends FormRequest
     {
         return [
             'company' => 'required',
-            'date' => 'required|date',
+            'date' => 'required',
             'start_time' => 'required',
             'hours' => 'required|numeric',
             'description' => 'required',
@@ -38,7 +38,6 @@ class AssignmentRequest extends FormRequest
         return [
             'company.required' => 'Je bent vergeten een bedrijf te kiezen',
             'date.required' => 'Je bent vergeten een datum te selecteren',
-            'date.date' => 'Deze veld moet een datum zijn',
             'start_time.required' => 'Je bent vergeten een tijd te selecteren',
             'hours.required' => 'Je bent vergeten de aantal uur in te vullen',
             'hours.numeric' => 'Uren mag alleen numeriek zijn',

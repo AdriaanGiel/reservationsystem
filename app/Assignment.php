@@ -44,4 +44,10 @@ class Assignment extends Model
         ]);
     }
 
+    public static function getByType($type)
+    {
+        $status = Status::where('name',$type)->first();
+        return static::with(['company','user'])->where('status_id',$status->id)->orderBy('date')->get();
+    }
+
 }

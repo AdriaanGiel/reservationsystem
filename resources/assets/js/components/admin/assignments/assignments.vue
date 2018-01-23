@@ -20,7 +20,7 @@
                         </thead>
                         <tbody>
                         <tr v-for="assignment in assignments">
-                            <td>{{ assignment.user.name }}</td>
+                            <td>{{ assignment.user.profile.firstname }} {{ assignment.user.profile.lastname }}</td>
                             <td>{{ assignment.company.name }}</td>
                             <td>{{ assignment.hours }}</td>
                             <td>{{ assignment.date }}</td>

@@ -10,7 +10,8 @@
         create-url="{{ route('assignments.store')  }}"
         csrf-token="{{ csrf_token() }}"
         :assignment-types="{{ $types }}"
-        date="{{$date}}"
+        date-object="{{$date}}"
+        time-object="{{$time}}"
     ></assignments-form>
 
 @endsection

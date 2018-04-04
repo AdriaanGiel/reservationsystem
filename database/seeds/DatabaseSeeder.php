@@ -15,7 +15,9 @@ class DatabaseSeeder extends Seeder
             AllTableSeeder::class,
             UserTableSeeder::class,
             CompanyTableSeeder::class,
-            AssignmentTableSeeder::class
+            AssignmentTableSeeder::class,
+            EventTableSeeder::class,
+            HighscoreTableSeeder::class
         ]);
     }
 }

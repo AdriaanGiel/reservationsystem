@@ -25,6 +25,28 @@ Route::get('test',function(){
     return $assignments;
 });
 
+Route::get('api/events',function(){
+  return \App\event::all();
+});
+
+Route::get('api/highscores',function(){
+    return \App\highscore::all()->sortby('points')->map(function($player){
+        unset($player->id);
+        return $player;
+    });
+});
+
+Route::post('api/higscores',function(Request $data){
+    $check = \App\highscore::all()->sortBy('points')->first();
+
+    if($data->input('points') > $check){
+        return \App\highscore::create($data->all());
+    }
+
+    return false;
+});
+
+
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('/home', 'HomeController@index')->name('home.index');
 

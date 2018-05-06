@@ -29,11 +29,9 @@ const app = new Vue({
     },
     router:router,
     methods:{
+        // Method to remove sidebar
         removeSideBar() {
             $("#sidenav-overlay").trigger("click")
-        },
-        closeSideNav(){
-
         }
     }
 });

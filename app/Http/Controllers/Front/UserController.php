@@ -31,23 +31,28 @@ class UserController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update user.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
     {
+        // Get logged in user
         $user = \Auth::user();
+
+        // Separate email from input data
         $email = $request->input('email');
 
+        // Check is email had been changed
         if($user->email != $email){
+            // If email had been changed, update user email
             $user->update([
                 'email' => $email
             ]);
         }
 
+        // Update user profile data and return if succeeded
         return \Auth::user()->profile()->update($request->only([
             'firstname',
             'lastname',
@@ -55,6 +60,11 @@ class UserController extends Controller
         ]));
     }
 
+    /**
+     * Method to update password
+     * @param Request $request
+     * @return User|null
+     */
     public function passwordUpdate(Request $request)
     {
         $user = \Auth::user();
@@ -65,6 +75,10 @@ class UserController extends Controller
         return $user;
     }
 
+    /**
+     * Get user with profile data
+     * @return \Illuminate\Database\Eloquent\Model|null|static
+     */
     public function getUserData()
     {
         $user = User::with('profile')->where('id',\Auth::user()->id)->first();

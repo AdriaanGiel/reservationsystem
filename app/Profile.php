@@ -4,8 +4,16 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class Profile
+ * @package App
+ */
 class Profile extends Model
 {
+    /**
+     * The attributes that are mass assignable.
+     * @var array
+     */
     protected $fillable = [
         'firstname',
         'lastname',
@@ -15,6 +23,10 @@ class Profile extends Model
     ];
 
 
+    /**
+     * Method to get user full name
+     * @return string
+     */
     public function fullName()
     {
         return "{$this->firstname} {$this->lastname}";

@@ -2,7 +2,11 @@
 
 use Faker\Generator as Faker;
 
-$factory->define(\App\Company::class, function (Faker $faker) use ($factory) {
+$factory->define(/**
+ * @param Faker $faker
+ * @return array
+ */
+    \App\Company::class, function (Faker $faker) use ($factory) {
 
     return [
         'name' => $faker->company,

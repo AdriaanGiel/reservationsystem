@@ -13,6 +13,7 @@
 
 use Routes\RouteGenerator;
 
+// All front routes
 
 Auth::routes();
 
@@ -20,31 +21,31 @@ Route::match(['get','post'],'register',function(){
     return redirect(route('login'));
 });
 
-Route::get('test',function(){
-    $assignments = \App\Assignment::getByType('approved');
-    return $assignments;
-});
-
-Route::get('api/events',function(){
-  return \App\event::all();
-});
-
-Route::get('api/highscores',function(){
-    return \App\highscore::all()->sortby('points')->map(function($player){
-        unset($player->id);
-        return $player;
-    });
-});
-
-Route::post('api/higscores',function(Request $data){
-    $check = \App\highscore::all()->sortBy('points')->first();
-
-    if($data->input('points') > $check){
-        return \App\highscore::create($data->all());
-    }
-
-    return false;
-});
+//Route::get('test',function(){
+//    $assignments = \App\Assignment::getByType('approved');
+//    return $assignments;
+//});
+//
+//Route::get('api/events',function(){
+//  return \App\event::all();
+//});
+//
+//Route::get('api/highscores',function(){
+//    return \App\highscore::all()->sortby('points')->map(function($player){
+//        unset($player->id);
+//        return $player;
+//    });
+//});
+//
+//Route::post('api/higscores',function(Request $data){
+//    $check = \App\highscore::all()->sortBy('points')->first();
+//
+//    if($data->input('points') > $check){
+//        return \App\highscore::create($data->all());
+//    }
+//
+//    return false;
+//});
 
 
 Route::get('/', 'HomeController@index')->name('home');

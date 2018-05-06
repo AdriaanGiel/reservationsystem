@@ -2,10 +2,19 @@
 
 use Faker\Generator as Faker;
 
-$factory->define(\App\Assignment::class, function (Faker $faker) use ($factory) {
+$factory->define(/**
+ * @param Faker $faker
+ * @return array
+ */
+    \App\Assignment::class, function (Faker $faker) use ($factory) {
 
+    // Create fake company
     $company = $factory->create(\App\Company::class);
+
+    // create random days in the future
     $date = \Carbon\Carbon::now()->addDays(rand(1,365));
+
+    // Fill factory with data
     return [
         'date' => $date->toDateString(),
         'start_time' => $faker->time(),
